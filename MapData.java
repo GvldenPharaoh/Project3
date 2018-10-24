@@ -14,9 +14,9 @@ import java.util.TreeMap;
 
 public class MapData
 {
-    HashMap<String, ArrayList<Observation>> dataCatalog;
-    EnumMap<StatType, TreeMap<String, Statistics>> statistics;
-    TreeMap<String, Integer> paramPositions;
+    HashMap<String, ArrayList<Observation>> dataCatalog; 
+    EnumMap<StatType, TreeMap<String, Statistics>> statistics; // Max all, Min all, Avg. all, total all
+    TreeMap<String, Integer> paramPositions; // Station ID and index
     
     protected  int NUMBER_OF_MISSING_OBSERVATIONS = 10;
     private Integer numberOfStations = null;
