@@ -10,10 +10,6 @@ public class Observation extends AbstractObservation
         this.stid = stid;
 
     }
-    public Observation()
-    {
-        // For Webcat
-    }
 
     public Double getValue() {
         return value;
