@@ -43,6 +43,7 @@ public class MapData
     }
 
     private void parseParamHeader(String inParamStr) throws IOException {
+
         String[] headerWithoutSpaces = inParamStr.trim().split("\\s+");
         for (int i; i < headerWithoutSpaces.length; i++)
         {
@@ -76,7 +77,7 @@ public class MapData
             Set<String> parameterIds = paramPositions.keySet();
             for (String paramId : parameterIds)
             {
-                if (paramId.equalsIgnoreCase(STID))
+                if (!paramId.equalsIgnoreCase(STID))
                 {
                     dataCatalog.get(paramId).add(new Observation(Double.parseDouble(skipSpaces[getIndexOf(paramId)]),
                             skipSpaces[getIndexOf(STID)]));
@@ -92,32 +93,67 @@ public class MapData
     }
 
     private void calculateAllStatistics() {
+        
+        Set<String> parameterIds = dataCatalog.keySet();
+        for (String paramId: parameterIds)
         {
+            double min = Double.MAX_VALUE;
+            double max = Double.MIN_VALUE;
+            String maxStid ="";
+            String minStid ="";
+            double total = 0.0;
+            double average = 0.0;
+            
+            ArrayList<Observation> data = dataCatalog.get(paramId);
+
+            for (Observation obs: data)
+            {
+                if(obs.isValid() && obs.getValue() > max) {
+                    max = obs.getValue();
+                    maxStid = obs.getStid();
+                }
+                if (obs.isValid() && obs.getValue() < min) {
+                    min = obs.getValue();
+                    minStid = obs.getStid();
+                }
+                if (obs.isValid()) {
+                    total += obs.getValue();
+                }
+                if (obs.isValid()) {
+                    average = (total/data.size());
+                }
+            }
+                
+            }
+        }
+
+
+       
+        
             statMapTotal.put(paramId new Statistics(total,MESONET,utcDateTime,date.size(),StatType.TOTAL));
-            statMapMin.put
+            statMapMin.put(paramID new Statistics())
             statMapMax.put
             statMapAverage.put
         }
-        //Set data into a stat EnumMap
-        statistics.put(StatType.AVERAGE,statMapAverage)
-        statistics.put(StatType.MINIMUM,statMapMin)
-        statistics.put(StatType.MAXIMUM,statMapMax)
-        statistics.put(StatType.TOTAL,statMapTotal)
+    // Set data into a stat EnumMap
+    statistics.put(StatType.AVERAGE,statMapAverage)statistics.put(StatType.MINIMUM,statMapMin)statistics.put(StatType.MAXIMUM,statMapMax)statistics.put(StatType.TOTAL,statMapTotal)
 
-
-        
     }
 
     private void prepareDataCatalog() {
+        Set<String> parameterIds = dataCatalog.keySet();
+        for (String paramId : parameterIds)
+        {
+            dataCatalog.put(paramId, new ArrayList<Observation>());
+        }
     }
 
     private void calculateStatistics() {
         calculateAllStatistics();
-        
+
     }
 
     public Statistics getStatistics(StatType type, String paramId) {
-        
     }
 
     public String toString() {
@@ -141,7 +177,7 @@ public class MapData
                 tairMax.getStid(), tairMin.getValue(), tairMin.getStid(), tairAverage.getValue(), tairAverage.getStid(),
                 ta9mMax.getValue(), ta9mMax.getStid(), ta9mMin.getValue(), ta9mMin.getStid(), ta9mAverage.getValue(),
                 ta9mAverage.getStid(), sradMax.getValue(), sradMax.getStid(), sradMin.getValue(), sradMin.getStid(),
-                sradAverage.getValue(), sradAverage.getStid()); //get statistics(MAX) or get statistics(stid)
+                sradAverage.getValue(), sradAverage.getStid()); // get statistics(MAX) or get statistics(stid)
 
     }
 }

@@ -15,19 +15,19 @@ public class Statistics extends Observation implements DateTimeComparable
     private int numberOfReportingStations;
     private StatType statType;
 
-    public Statistics(double value, String stid, GregorianCalendar dateTime, int numberOfValidStations, StatType inStatType)
+    public Statistics(double value, String stid, GregorianCalendar dateTime, int numberOfValidStations,
+            StatType inStatType)
     {
         super(value, stid);
-        this.DATE_TIME_FORMAT = dateTimeStr;
+        this.statType = inStatType;
         this.numberOfReportingStations = numberOfValidStations;
         this.statType = inStatType;
     }
 
-    public Statistics(double value, String stid, ZonedDateTime dateTime, int numberOfValidStations,
-            StatType inStatType)
+    public Statistics(double value, String stid, ZonedDateTime dateTime, int numberOfValidStations, StatType inStatType)
     {
         super(value, stid);
-        this.utcDateTime = dateTime;
+        this.statType = inStatType;
         this.numberOfReportingStations = numberOfValidStations;
         this.statType = inStatType;
     }
@@ -37,15 +37,17 @@ public class Statistics extends Observation implements DateTimeComparable
         yt.parse(dateTimeStr);
         return (GregorianCalendar) yt.getCalendar();
     }
-    ZonedDateTime createZDateFromString(String dateTimeStr){
+
+    ZonedDateTime createZDateFromString(String dateTimeStr) {
         return zdtDateTime;
-        
+
     }
 
     public String createStringFromDate(GregorianCalendar calendar) {
         SimpleDateFormat yt = new SimpleDateFormat(DATE_TIME_FORMAT);
         return yt.format(calendar);
     }
+
     public String createStringFromDate(ZonedDateTime calendar) {
         SimpleDateFormat yt = new SimpleDateFormat(DATE_TIME_FORMAT);
         return yt.format(calendar);
@@ -60,26 +62,27 @@ public class Statistics extends Observation implements DateTimeComparable
     }
 
     public boolean newerThan(GregorianCalendar inDateTime) {
-        return utcDateTime.after(inDateTime); // change
+        return utcDateTime.after(inDateTime);
     }
 
     public boolean olderThan(GregorianCalendar inDateTime) {
-        return utcDateTime.before(inDateTime); // change
+        return utcDateTime.before(inDateTime);
     }
 
     public boolean sameAs(GregorianCalendar inDateTime) {
-        return utcDateTime.equals(inDateTime); // change
+        return utcDateTime.equals(inDateTime);
     }
+
     public boolean newerThan(ZonedDateTime inDateTime) {
-        return utcDateTime.after(inDateTime); // change
+        return utcDateTime.after(inDateTime);
     }
 
     public boolean olderThan(ZonedDateTime inDateTime) {
-        return utcDateTime.before(inDateTime); // change
+        return utcDateTime.before(inDateTime);
     }
 
     public boolean sameAs(ZonedDateTime inDateTime) {
-        return utcDateTime.equals(inDateTime); // change
+        return utcDateTime.equals(inDateTime);
     }
 
     public String toString() {
