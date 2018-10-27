@@ -45,7 +45,7 @@ public class MapData
     private void parseParamHeader(String inParamStr) throws IOException {
 
         String[] headerWithoutSpaces = inParamStr.trim().split("\\s+");
-        for (int i; i < headerWithoutSpaces.length; i++)
+        for (int i = 0; i < headerWithoutSpaces.length; i++)
         {
             paramPositions.put(headerWithoutSpaces[i], i);
         }
@@ -93,50 +93,56 @@ public class MapData
     }
 
     private void calculateAllStatistics() {
-        
+        TreeMap<String, Statistics> StatMapTotal = new TreeMap<String, Statistics>();
+        TreeMap<String, Statistics> StatMapMin = new TreeMap<String, Statistics>();
+        TreeMap<String, Statistics> StatMapMax = new TreeMap<String, Statistics>();
+        TreeMap<String, Statistics> StatMapAverage = new TreeMap<String, Statistics>();
+
         Set<String> parameterIds = dataCatalog.keySet();
-        for (String paramId: parameterIds)
+        for (String paramId : parameterIds)
         {
             double min = Double.MAX_VALUE;
             double max = Double.MIN_VALUE;
-            String maxStid ="";
-            String minStid ="";
-            double total = 0.0;
+            String maxStid = "";
+            String minStid = "";
+            double total = 0;
             double average = 0.0;
-            
+            numberOfStations = 0;
+
             ArrayList<Observation> data = dataCatalog.get(paramId);
 
-            for (Observation obs: data)
+            for (Observation obs : data)
             {
-                if(obs.isValid() && obs.getValue() > max) {
+
+                if (obs.isValid() && obs.getValue() > max)
+                {
                     max = obs.getValue();
                     maxStid = obs.getStid();
                 }
-                if (obs.isValid() && obs.getValue() < min) {
+                if (obs.isValid() && obs.getValue() < min)
+                {
                     min = obs.getValue();
                     minStid = obs.getStid();
                 }
-                if (obs.isValid()) {
+                if (obs.isValid())
+                {
+                    numberOfStations++;
                     total += obs.getValue();
                 }
-                if (obs.isValid()) {
-                    average = (total/data.size());
-                }
-            }
-                
-            }
-        }
 
+            }
+            average = (total / numberOfStations);
 
-       
-        
-            statMapTotal.put(paramId new Statistics(total,MESONET,utcDateTime,date.size(),StatType.TOTAL));
-            statMapMin.put(paramID new Statistics())
-            statMapMax.put
-            statMapAverage.put
+            StatMapTotal.put(paramId, new Statistics(total, MESONET, utcDateTime, data.size(), StatType.TOTAL));
+            StatMapMin.put(paramId, new Statistics(min, minStid, utcDateTime, data.size(), StatType.MINIMUM));
+            StatMapMax.put(paramId, new Statistics(max, maxStid, utcDateTime, data.size(), StatType.MAXIMUM));
+            StatMapAverage.put(paramId, new Statistics(average, MESONET, utcDateTime, data.size(), StatType.AVERAGE));
+
         }
-    // Set data into a stat EnumMap
-    statistics.put(StatType.AVERAGE,statMapAverage)statistics.put(StatType.MINIMUM,statMapMin)statistics.put(StatType.MAXIMUM,statMapMax)statistics.put(StatType.TOTAL,statMapTotal)
+        statistics.put(StatType.TOTAL, StatMapTotal);
+        statistics.put(StatType.MINIMUM, StatMapMin);
+        statistics.put(StatType.MAXIMUM, StatMapMax);
+        statistics.put(StatType.AVERAGE, StatMapAverage);
 
     }
 
@@ -154,6 +160,7 @@ public class MapData
     }
 
     public Statistics getStatistics(StatType type, String paramId) {
+        return ;
     }
 
     public String toString() {
