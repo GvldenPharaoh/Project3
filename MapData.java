@@ -29,17 +29,17 @@ public class MapData
     String MESONET = "Mesonet";
     private String fileName;
     private GregorianCalendar utcDateTime;
-    private String Directory;
+    private String directory;
 
     MapData(int year, int month, int day, int hour, int minute, String directory) throws IOException
     {
         this.utcDateTime = new GregorianCalendar(year, month, day, hour, minute);
-        this.Directory = directory;
+        this.directory = directory;
         fileName = createFileName(year, month, day, hour, minute, directory);
     }
 
-    String createFileName(int year, int month, int day, int hour, int minute, String Directory) {
-        return String.format("%s/%04d%02d%02d%02d%02d.mdf", Directory, year, month, day, hour, minute);
+    String createFileName(int year, int month, int day, int hour, int minute, String directory) {
+        return String.format("%s/%04d%02d%02d%02d%02d.mdf", directory, year, month, day, hour, minute);
     }
 
     private void parseParamHeader(String inParamStr) throws IOException {
@@ -56,6 +56,10 @@ public class MapData
         return paramPositions.get(inParamStr);
     }
 
+    public String getDirectory() {
+        return directory;
+    }
+
     void parseFile() throws IOException {
 
         BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -66,14 +70,13 @@ public class MapData
         strg = br.readLine();
 
         parseParamHeader(strg);
+        prepareDataCatalog();
         strg = br.readLine();
-        String[] skipSpaces = new String[24];
 
         while (strg != null)
         {
-
+            String[] skipSpaces = new String[24];
             skipSpaces = strg.trim().split("\\s+");
-
             Set<String> parameterIds = paramPositions.keySet();
             for (String paramId : parameterIds)
             {
@@ -126,8 +129,8 @@ public class MapData
                 }
                 if (obs.isValid())
                 {
-                    numberOfStations++;
                     total += obs.getValue();
+                    numberOfStations ++;
                 }
 
             }
@@ -147,7 +150,7 @@ public class MapData
     }
 
     private void prepareDataCatalog() {
-        Set<String> parameterIds = dataCatalog.keySet();
+        Set<String> parameterIds = paramPositions.keySet();
         for (String paramId : parameterIds)
         {
             dataCatalog.put(paramId, new ArrayList<Observation>());
@@ -160,7 +163,7 @@ public class MapData
     }
 
     public Statistics getStatistics(StatType type, String paramId) {
-        return ;
+        return statistics.get(type).get(paramId);
     }
 
     public String toString() {
@@ -180,11 +183,16 @@ public class MapData
                 + "Average Solar Radiation[1.5m] = %.1f W/m^2 at %s\n"
                 + "========================================================", utcDateTime.get(Calendar.YEAR),
                 utcDateTime.get(Calendar.MONTH), utcDateTime.get(Calendar.DAY_OF_MONTH),
-                utcDateTime.get(Calendar.HOUR_OF_DAY), utcDateTime.get(Calendar.MINUTE), tairMax.getValue(),
-                tairMax.getStid(), tairMin.getValue(), tairMin.getStid(), tairAverage.getValue(), tairAverage.getStid(),
-                ta9mMax.getValue(), ta9mMax.getStid(), ta9mMin.getValue(), ta9mMin.getStid(), ta9mAverage.getValue(),
-                ta9mAverage.getStid(), sradMax.getValue(), sradMax.getStid(), sradMin.getValue(), sradMin.getStid(),
-                sradAverage.getValue(), sradAverage.getStid()); // get statistics(MAX) or get statistics(stid)
+                utcDateTime.get(Calendar.HOUR_OF_DAY), utcDateTime.get(Calendar.MINUTE),
+                getStatistics(StatType.MAXIMUM, TAIR).getValue(), getStatistics(StatType.MAXIMUM, TAIR).getStid(),
+                getStatistics(StatType.MINIMUM, TAIR).getValue(), getStatistics(StatType.MINIMUM, TAIR).getStid(),
+                getStatistics(StatType.AVERAGE, TAIR).getValue(), getStatistics(StatType.AVERAGE, TAIR).getStid(),
+                getStatistics(StatType.MAXIMUM, TA9M).getValue(), getStatistics(StatType.MAXIMUM, TA9M).getStid(),
+                getStatistics(StatType.MINIMUM, TA9M).getValue(), getStatistics(StatType.MINIMUM, TA9M).getStid(),
+                getStatistics(StatType.AVERAGE, TA9M).getValue(), getStatistics(StatType.AVERAGE, TA9M).getStid(),
+                getStatistics(StatType.MAXIMUM, SRAD).getValue(), getStatistics(StatType.MAXIMUM, SRAD).getStid(),
+                getStatistics(StatType.MINIMUM, SRAD).getValue(), getStatistics(StatType.MINIMUM, SRAD).getStid(),
+                getStatistics(StatType.AVERAGE, SRAD).getValue(), getStatistics(StatType.AVERAGE, SRAD).getStid());
 
     }
 }
