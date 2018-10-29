@@ -21,7 +21,7 @@ public class Statistics extends Observation implements DateTimeComparable
         super(value, stid);
         this.statType = inStatType;
         this.numberOfReportingStations = numberOfValidStations;
-        this.statType = inStatType;
+        this.utcDateTime = dateTime;
     }
 
     public Statistics(double value, String stid, ZonedDateTime dateTime, int numberOfValidStations, StatType inStatType)
@@ -29,7 +29,7 @@ public class Statistics extends Observation implements DateTimeComparable
         super(value, stid);
         this.statType = inStatType;
         this.numberOfReportingStations = numberOfValidStations;
-        this.statType = inStatType;
+        this.zdtDateTime = dateTime;
     }
 
     public GregorianCalendar createDateFromString(String dateTimeStr) throws ParseException {
@@ -38,7 +38,7 @@ public class Statistics extends Observation implements DateTimeComparable
         return (GregorianCalendar) yt.getCalendar();
     }
 
-    ZonedDateTime createZDateFromString(String dateTimeStr) {
+   public ZonedDateTime createZDateFromString(String dateTimeStr) {
         return zdtDateTime;
 
     }
@@ -74,15 +74,15 @@ public class Statistics extends Observation implements DateTimeComparable
     }
 
     public boolean newerThan(ZonedDateTime inDateTime) {
-        return utcDateTime.after(inDateTime);
+        return zdtDateTime.isAfter(inDateTime);
     }
 
     public boolean olderThan(ZonedDateTime inDateTime) {
-        return utcDateTime.before(inDateTime);
+        return zdtDateTime.isBefore(inDateTime);
     }
 
     public boolean sameAs(ZonedDateTime inDateTime) {
-        return utcDateTime.equals(inDateTime);
+        return zdtDateTime.equals(inDateTime);
     }
 
     public String toString() {
