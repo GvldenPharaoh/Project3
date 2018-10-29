@@ -17,7 +17,6 @@ public class MapDataTest
         boolean valid = expected.equals(output);
         Assert.assertTrue(valid);
     }
-    public void 
 
     @Test
     public void testToString() throws IOException, ParseException {
