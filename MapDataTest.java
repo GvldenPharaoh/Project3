@@ -19,6 +19,12 @@ public class MapDataTest
     }
 
     @Test
+    public void testGetStatistics()
+    {
+
+    }
+
+    @Test
     public void testToString() throws IOException, ParseException {
         Observation temp = new Observation(20.4, "stid");
         String output = temp.getStid();

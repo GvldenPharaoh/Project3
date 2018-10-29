@@ -63,9 +63,7 @@ public class MapData
     void parseFile() throws IOException {
 
         BufferedReader br = new BufferedReader(new FileReader(fileName));
-
         String strg = br.readLine();
-
         strg = br.readLine();
         strg = br.readLine();
 
@@ -130,7 +128,7 @@ public class MapData
                 if (obs.isValid())
                 {
                     total += obs.getValue();
-                    numberOfStations ++;
+                    numberOfStations++;
                 }
 
             }

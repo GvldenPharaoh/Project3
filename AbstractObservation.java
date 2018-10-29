@@ -10,3 +10,4 @@ public abstract class AbstractObservation
     abstract public boolean isValid();
     
 }
+ 
